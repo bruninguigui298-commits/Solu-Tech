@@ -17,7 +17,7 @@ CREATE TABLE clients (
     cpf VARCHAR(14) NOT NULL UNIQUE
 );
 
-CREATE TABLE adresses (
+CREATE TABLE addresses (
     id INT AUTO_INCREMENT PRIMARY KEY,
     street VARCHAR(100) NOT NULL,
     number VARCHAR(10) NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE adresses (
 
 CREATE TABLE phones (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    observations VARCHAR(255),
+    obeservetion VARCHAR(255),
     number VARCHAR(15) NOT NULL,
     ddd VARCHAR(5) NOT NULL,
     id_clients INT NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE services (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description VARCHAR(255),
-    duration INT NOT NULL,
+    duration INT NOT NULL COMMENT "BUSINESS DAYS",
     value DECIMAL(10, 2) NOT NULL
 );
 
