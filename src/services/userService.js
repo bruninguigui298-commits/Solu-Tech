@@ -19,12 +19,11 @@ const userService = {
         return resultado
     },
     createUser: async(user) => {
-        console.log(user.role)
+        console.log(user)
          const resultado = await userRepository.create(
             user.name,
             user.email,
             user.password,
-            user.role
         );
         return resultado
     },

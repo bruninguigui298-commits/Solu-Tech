@@ -17,11 +17,11 @@ const userRepository = {
         return rows
     },
     
-    create: async (name, email , password, role) => {
-        console.log(name, email, password, role);
+    create: async (name, email , password) => {
+        console.log(name, email, password);
         
-        const sql = 'INSERT INTO users VALUES(null, ?, ?, ?, ?);'
-        const [rows] = await pool.execute(sql, [name, email, password, role])
+        const sql = 'INSERT INTO users VALUES(null, ?, ?, ?);'
+        const [rows] = await pool.execute(sql, [name, email, password])
         return rows
     },
     
