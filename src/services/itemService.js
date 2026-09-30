@@ -13,10 +13,7 @@ const itemService = {
         return result;
     },
     createItem: async (item) => {
-        if (!item.id_products || !item.id_services) {
-            throw new Error("Both id_products and id_services are required");
-        }
-        const result = await itemrepository.create(item);
+              const result = await itemrepository.create(item);
         return result;
     },
     updateItem: async (item) => {
