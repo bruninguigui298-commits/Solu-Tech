@@ -3,10 +3,10 @@ import serviceController from "../controllers/serviceController.js";
 
 const serviceRouter = Router();
 
-serviceRouter.get("/services", serviceController.listServices);
-serviceRouter.get("/services/:id", serviceController.servicesId);
-serviceRouter.post("/services", serviceController.createServices);
-serviceRouter.put("/services/:id", serviceController.updateServices);
-serviceRouter.delete("/services/:id", serviceController.deleteServices);
+serviceRouter.get("/", serviceController.listServices);
+serviceRouter.get("/:id", serviceController.servicesId);
+serviceRouter.post("/", serviceController.createServices);
+serviceRouter.put("/:id", serviceController.updateServices);
+serviceRouter.delete("/:id", serviceController.deleteServices);
 
 export default serviceRouter;

@@ -3,11 +3,11 @@ import productController from "../controllers/productController.js";
 
 const productRoutes = Router();
 
-productRoutes.get("/product", productController.listProducts);
-productRoutes.get("/product/:id", productController.productsId);
-productRoutes.post("/product", productController.createProducts);
-productRoutes.put("/product/:id", productController.updateProducts);
-productRoutes.patch("/product/:id", productController.updateProduct);
-productRoutes.delete("/product/:id", productController.deleteProducts);
+productRoutes.get("/", productController.listProducts);
+productRoutes.get("/:id", productController.productsId);
+productRoutes.post("/", productController.createProducts);
+productRoutes.put("/:id", productController.updateProducts);
+productRoutes.patch("/:id", productController.updateProduct);
+productRoutes.delete("/:id", productController.deleteProducts);
 
 export default productRoutes;
