@@ -9,7 +9,7 @@ const authController = {
             const {email, password} = req.body
             const userExists = await userService.RetrieveUserEmail(email)
 
-            if(!userExists || userExists.lenght === 0){
+            if(!userExists || userExists.length === 0){
                 return res.status(400).json({
                     message: "USUARIO NÃO ENCONTRADO"
                 })
@@ -29,7 +29,6 @@ const authController = {
                 id: userExists[0].id,
                 email: userExists[0].email,
                 name: userExists[0].name,
-                role: userExists[0].role
             },
             process.env.JWT_SECRET,
             {

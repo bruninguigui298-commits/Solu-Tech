@@ -1,4 +1,5 @@
-import pool from '../configs/Database.js'
+import pool from '../configs/database.js'
+import Addresses from '../models/Addresses.js'
 
 const clienteRepository = {
     select: async() => {
@@ -14,7 +15,6 @@ const clienteRepository = {
         return rows
     },
     selectId: async(clientId) => {
-        // CORRIGIDO: Adicionado "= ?" na cláusula WHERE
         const sql = 'SELECT * FROM clients WHERE id = ?;'
         const [rows] = await pool.execute(sql, [clientId])
         return rows
@@ -73,7 +73,7 @@ const clienteRepository = {
             return {
                 cliente: rowsCli,
                 phone: rowsTel,
-                address: rowsEnd
+                addresses: rowsEnd
             };
         }
         catch(error){
@@ -111,12 +111,12 @@ const clienteRepository = {
     
             const sqlEnd = 'UPDATE address SET street = ?, number = ?, district = ?, city = ?, state = ?, cep = ? WHERE id_clients = ?;';
             const [rowsEnd] = await conn.execute(sqlEnd, [
-                client.address?.street || null,
-                client.address?.number || null,
-                client.address?.district || null,
-                client.address?.city || null,
-                client.address?.state || null,
-                client.address?.cep || null,
+                client.addresses?.street || null,
+                client.addresses?.number || null,
+                client.addresses?.district || null,
+                client.addresses?.city || null,
+                client.addresses?.state || null,
+                client.addresses?.cep || null,
                 client.id 
             ]);
 

@@ -23,18 +23,18 @@ const clienteController = {
     },
     create: async (req,res)  => {
        try{
-        const {name, email, cpf, phone, address} = req.body
-        console.log(name, email, cpf, phone, address)
-        if(!name || !email || !cpf || !phone || !address){
+        const {name, email, cpf, phone, addresses} = req.body
+        console.log(name, email, cpf, phone, addresses)
+        if(!name || !email || !cpf || !phone || !addresses){
             return res.status(404).json({
                 message: "Informações incompletas ou erradas."
             })
         }
         const phoneUser = new Phone(phone.observation, phone.number, phone.ddd, null);
 
-        const addressUser = new Address(address.street, address.number, address.district, address.city, address.state, address.cep, null);
+        const addressesUser = new Addresses(addresses.street, addresses.number, addresses.district, addresses.city, addresses.state, addresses.cep, null);
 
-        const cliente = new Cliente(name, email, cpf, phoneUser, addressUser, null)
+        const cliente = new Cliente(name, email, cpf, phoneUser, addressesUser, null)
         
         const resultado = await clienteService.createCliente(cliente);
         return res.status(201).json({

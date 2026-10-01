@@ -29,8 +29,8 @@ const userService = {
     },
     updateUser: async(user) => {
          const resultado = await userRepository.update(
-            user.name,
             user.email,
+            user.name,
             user.password,
             user.id
         );

@@ -1,4 +1,4 @@
-class Address {
+class Addresses {
     #id
     #street
     #number
@@ -63,4 +63,4 @@ class Address {
 
 }
 
-export default Address
+export default Addresses
