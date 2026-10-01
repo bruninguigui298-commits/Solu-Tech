@@ -4,14 +4,14 @@
     #email
     #cpf
     #phone
-    #address
+    #addresses
    
-    constructor(name, email, cpf, phone, address, id = null){
+    constructor(name, email, cpf, phone, addresses, id = null){
         this.#name = name
         this.#email = email
         this.#cpf = cpf
         this.#phone = phone;
-        this.#address = address;
+        this.#addresses = addresses;
         this.#id = id
     }
 
@@ -43,11 +43,11 @@
     set phone(value){    
         this.#phone = value;
     }
-    get address(){
-        return this.#address;
+    get addresses(){
+        return this.#addresses;
     }
-    set address(value){    
-        this.#address = value;
+    set addresses(value){    
+        this.#addresses = value;
     }
     
 }

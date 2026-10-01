@@ -1,4 +1,4 @@
-import Address from '../models/Address.js';
+import Addresses from '../models/Addresses.js';
 import Cliente from '../models/Cliente.js';
 import Phone from '../models/Phone.js';
 import clienteService from '../services/clienteService.js';
@@ -68,11 +68,11 @@ const clienteController = {
     update: async(req,res) => {
         try{const {id} = req.params;
         
-        const {name,email, cpf, phone, address} = req.body
+        const {name,email, cpf, phone, addresses} = req.body
         const phoneUser = new Phone(phone.observation, phone.number, phone.ddd, null);
-        const addressUser = new Address(address.street, address.number, address.district, address.city, address.state, address.cep, null);
-        const cliente = new Cliente(name, email, cpf, phoneUser, addressUser, id)
-        console.log(phoneUser,addressUser)
+        const addressesUser = new Addresses(addresses.street, addresses.number, addresses.district, addresses.city, addresses.state, addresses.cep, null);
+        const cliente = new Cliente(name, email, cpf, phoneUser, addressesUser, id)
+        console.log(phoneUser,addressesUser)
         const resultado = await clienteService.updateCliente(cliente)
             return res.status(200).json({
                 msg: "CLIENTE EDITADO",

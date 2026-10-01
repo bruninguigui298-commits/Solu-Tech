@@ -10,7 +10,7 @@ const clienteRepository = {
                     FROM clients AS c
                     INNER JOIN phones AS p
                         ON c.id = p.id_clients
-                    INNER JOIN address AS a ON c.id = a.id_clients;`
+                    INNER JOIN addresses AS a ON c.id = a.id_clients;`
         const [rows] = await pool.execute(sql)
         return rows
     },
@@ -27,7 +27,7 @@ const clienteRepository = {
             const sqlTel = 'DELETE FROM phones WHERE id_clients = ?;'
             const [rowsTel] = await conn.execute(sqlTel, [clientId]);
 
-            const sqlEnd = 'DELETE FROM address WHERE id_clients = ?;'
+            const sqlEnd = 'DELETE FROM addresses WHERE id_clients = ?;'
             const [rowsEnd] = await conn.execute(sqlEnd, [clientId]);
 
             const sqlCli = 'DELETE FROM clients WHERE id = ?;';
@@ -38,7 +38,7 @@ const clienteRepository = {
             return {
                 cliente: rowsCli,
                 phone: rowsTel,
-                address: rowsEnd
+                addresses: rowsEnd
             };
         }
         catch(error) {
@@ -65,9 +65,8 @@ const clienteRepository = {
             const [rowsTel] = await conn.execute(sqlTel, [cliente.phone.observation, cliente.phone.number, cliente.phone.ddd, idCliente]);
             
     
-            const sqlEnd = 'INSERT INTO address VALUES(null, ?, ?, ?, ?, ?, ?, ?);'
-            const [rowsEnd] = await conn.execute(sqlEnd, [cliente.address.street, cliente.address.number, cliente.address.district, cliente.address.city, cliente.address.state, cliente.address.cep, idCliente])
-
+            const sqlEnd = 'INSERT INTO addresses VALUES(null, ?, ?, ?, ?, ?, ?, ?);'
+            const [rowsEnd] = await conn.execute(sqlEnd, [cliente.addresses.street, cliente.addresses.number, cliente.addresses.district, cliente.addresses.city, cliente.addresses.state, cliente.addresses.cep, idCliente])
             await conn.commit();
 
             return {
@@ -109,7 +108,7 @@ const clienteRepository = {
             ]);
 
     
-            const sqlEnd = 'UPDATE address SET street = ?, number = ?, district = ?, city = ?, state = ?, cep = ? WHERE id_clients = ?;';
+            const sqlEnd = 'UPDATE addresses SET street = ?, number = ?, district = ?, city = ?, state = ?, cep = ? WHERE id_clients = ?;';
             const [rowsEnd] = await conn.execute(sqlEnd, [
                 client.addresses?.street || null,
                 client.addresses?.number || null,
@@ -125,7 +124,7 @@ const clienteRepository = {
             return {
                 cliente: rowsCli,
                 phone: rowsTel,
-                address: rowsEnd
+                addresses: rowsEnd
             };
         }
         catch(error){
