@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import express from 'express'
 import clienteRoutes from './routes/clienteRoutes.js';
-import saleRoutes from './routes/SaleRoutes.js'
+import saleRoutes from './routes/saleRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import authRoutes from './routes/authRoutes.js';
 import itemRoutes from './routes/itemRoutes.js'
