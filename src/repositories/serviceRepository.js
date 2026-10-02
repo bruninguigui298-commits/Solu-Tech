@@ -11,14 +11,15 @@ const serviceRepository = {
         const [rows] = await pool.query(sql, [ID]);
         return rows[0];
     },
-    createServices: async (name, description, value, duration) => {
-        const sql = "INSERT INTO services (name, description, value, duration) VALUES (?, ?, ?, ?)";
-        const [rows] = await pool.query(sql, [name, description, value, duration]);
-        return rows.insertId;
+    createServices: async (name, description, duration, value) => {
+        const sql = "INSERT INTO services (name, description, duration, value) VALUES (?, ?, ?, ?)";
+        const [rows] = await pool.query(sql, [name, description, duration, value]);
+        return rows;
     }, 
-    updateServices: async (name, description, value, duration, id) => {
-        const sql = "UPDATE services SET name = ?, description = ?, value = ?, duration = ? WHERE id = ?";
-        const [rows] = await pool.query(sql, [name, description, value, duration, id]);
+    updateServices: async (name, description, duration, value, id) => {
+        console.log(name, description, duration, value, id)
+        const sql = "UPDATE services SET name = ?, description = ?, duration = ?, value = ? WHERE id = ?";
+        const [rows] = await pool.query(sql, [name, description, duration, value, id]);
         return rows;
     },
     delete: async (ID) => {

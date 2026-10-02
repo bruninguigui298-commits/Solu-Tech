@@ -28,8 +28,8 @@ const serviceController = {
     },
     createServices: async (req, res) => {
         try {
-            const { name, description, value, duration } = req.body;
-            const servico = await serviceService.createService({ name, description, value, duration });
+            const { name, description, duration, value } = req.body;
+            const servico = await serviceService.createService({ name, description, duration, value });
             const result = await serviceService.recoverServicesbyID(servico);
             return res.status(201).json({
                 message: "Service created successfully",
@@ -42,8 +42,10 @@ const serviceController = {
     updateServices: async (req, res) => {
         try {
             const { id } = req.params;
-            const { name, description, value, duration } = req.body;
-            const result = await serviceService.updateService({ id, name, description, value, duration });
+            const { name, description, duration, value } = req.body;
+            console.log(name, description, duration, value)
+            const service = new serviceModel(id, name, description, value, duration);
+            const result = await serviceService.updateService(service);
             return res.json({
                 message: "Service updated successfully",
                 data: result

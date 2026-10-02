@@ -28,18 +28,6 @@ const saleService = {
 
     create: async (sale) => {
 
-        if (!sale.total) {
-            throw new Error(
-                'O valor total da venda é obrigatório'
-            )
-        }
-
-        if (sale.total <= 0) {
-            throw new Error(
-                'O valor total deve ser maior que zero'
-            )
-        }
-
         if (!sale.payment_method) {
             throw new Error(
                 'O método de pagamento é obrigatório'

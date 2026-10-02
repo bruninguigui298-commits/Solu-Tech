@@ -24,9 +24,6 @@ const itemService = {
         return result;
     },
     deleteItem: async (id) => {
-        if (!id) {
-            throw new Error("ID is required");
-        }
         const result = await itemrepository.delete(id);
         return result;
     }

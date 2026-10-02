@@ -20,8 +20,8 @@ const userRepository = {
     create: async (email, name , password) => {
         console.log(email, name, password);
         
-        const sql = 'INSERT INTO users VALUES(null, ?, ?, ?);'
-        const [rows] = await pool.execute(sql, [email, name, password])
+        const sql = 'INSERT INTO users (name, email, password) VALUES(?, ?, ?);'
+        const [rows] = await pool.execute(sql, [name, email, password])
         return rows
     },
     

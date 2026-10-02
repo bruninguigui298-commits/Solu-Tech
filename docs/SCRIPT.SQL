@@ -71,7 +71,8 @@ CREATE TABLE items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     quantity INT NOT NULL,
     value DECIMAL(10, 2) NOT NULL,
-    subtotal DECIMAL(10, 2) NOT NULL,
+    subtotal DECIMAL(10,2)
+        GENERATED ALWAYS AS (quantity * value) STORED,
     id_sales INT NOT NULL,
     FOREIGN KEY (id_sales) REFERENCES sales(id),
     id_products INT NULL,

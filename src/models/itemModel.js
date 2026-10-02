@@ -1,16 +1,18 @@
-class itemModel {
+class ItemModel {
     #id;
     #quantity;
     #value;
     #subtotal;
+    #id_sales
     #id_products;
     #id_services;
 
-    constructor(id, quantity, value, subtotal, id_products, id_services) {
+    constructor(id, quantity, value, subtotal,id_sales, id_products, id_services) {
         this.#id = id;
         this.#quantity = quantity;
         this.#value = value;
         this.#subtotal = subtotal;
+        this.#id_sales = id_sales
         this.#id_products = id_products;
         this.#id_services = id_services;
     }
@@ -35,6 +37,9 @@ class itemModel {
     set subtotal(subtotal) {
         this.#subtotal = subtotal;
     }
+     get id_sales() {
+        return this.#id_sales;
+    }    
     get id_products() {
         return this.#id_products;
     }
@@ -43,4 +48,4 @@ class itemModel {
     }
 }
 
-export default itemModel;
+export default ItemModel;

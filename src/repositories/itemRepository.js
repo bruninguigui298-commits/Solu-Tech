@@ -32,8 +32,8 @@ const itemRepository = {
                s.duration AS services_duration,
                s.value AS services_value
         FROM items AS i
-        LEFT JOIN products AS p ON i.id_products = p.id
-        LEFT JOIN services AS s ON i.id_services = s.id
+        INNER JOIN products AS p ON i.id_products = p.id
+        INNER JOIN services AS s ON i.id_services = s.id
         WHERE i.id = ?;
     `;
         const [result] = await pool.query(sql, [id]);
@@ -43,12 +43,14 @@ const itemRepository = {
         const conn = await pool.getConnection();
         try {
             await conn.beginTransaction();
-            const sql = `INSERT INTO items (quantity, value, subtotal, id_products, id_services)
-                     VALUES (?, ?, ?, ?, ?);`;
+            console.log("ITEM RECEBIDO NO CREATE:", item);
+            const sql = `INSERT INTO items (quantity, value, subtotal, id_sales, id_products, id_services)
+                     VALUES (?, ?, ?, ?, ?, ?);`;
             const [result] = await conn.query(sql, [
                 item.quantity,
                 item.value,
                 item.subtotal,
+                item.id_sales,
                 item.id_products ?? null,
                 item.id_services ?? null
             ]);
@@ -61,35 +63,22 @@ const itemRepository = {
             conn.release();
         }
     },
-    updateItem: async (req, res) => {
+    updateItem: async (quantity, value, subtotal, id_sales, id_products, id_services) => {
         try {
-            const id = Number(req.params.id);
-            if (!Number.isInteger(id)) {
-                return res.status(400).json({ error: "Invalid id" });
-            }
-            const { quantity, value, subtotal, id_products, id_services } = req.body;
-            const item = new itemModel(id, quantity, value, subtotal, id_products, id_services);
-            const affectedRows = await itemService.updateItem(item);
-            if (affectedRows === 0) {
-                return res.status(404).json({ message: "Item not found" });
-            }
-            return res.status(200).json({ message: "Item updated successfully" });
+          const sql = 'UPDATE item SET quantity = ?, value = ?, subtotal = ?, id_sales =?, id_products = ?, id_services = ? WHERE id = ?;'
+        const [rows] = await pool.execute(sql, [quantity, value, subtotal, id_sales, id_products, id_services])
+        return rows
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
     },
-    deleteItem: async (req, res) => {
+    deleteItem: async (id) => {
         try {
-            const id = Number(req.params.id);
-            if (!Number.isInteger(id)) {
-                return res.status(400).json({ error: "Invalid id" });
-            }
-            const affectedRows = await itemService.deleteItem(id);
-            if (affectedRows === 0) {
-                return res.status(404).json({ message: "Item not found" });
-            }
-            return res.status(200).json({ message: "Item deleted successfully" });
-        } catch (error) {
+            const sql = "DELETE FROM items WHERE id = ?"
+        const [rows] = await pool.query(sql, [id]);
+        return rows;
+        }
+         catch (error) {
             return res.status(500).json({ error: error.message });
         }
     }

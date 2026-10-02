@@ -3,6 +3,7 @@ class Sale {
     #date
     #total
     #payment_method
+    #itens
     #id_clients
     #id_users
 
@@ -11,6 +12,7 @@ class Sale {
         payment_method,
         id_clients,
         id_users,
+        itens,
         date = null,
         id = null
     ) {
@@ -20,6 +22,7 @@ class Sale {
         this.#payment_method = payment_method
         this.#id_clients = id_clients
         this.#id_users = id_users
+        this.#itens = itens
     }
 
     get id() {
@@ -64,6 +67,14 @@ class Sale {
 
     set id_users(value) {
         this.#id_users = value
+    }
+
+    get itens() {
+        return this.#itens
+    }
+
+    set itens(value) {
+        this.#itens = value
     }
 }
 

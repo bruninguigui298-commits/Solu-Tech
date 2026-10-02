@@ -9,7 +9,7 @@ const productRepository = {
     },
 
     productsId: async(ID) =>{
-        const sql = "SELECT * FROM products WHERE id;";
+        const sql = "SELECT * FROM products WHERE id = ?;";
         const [rows] = await pool.execute(sql, [ID]);
         return rows;
     },
@@ -21,7 +21,6 @@ const productRepository = {
     },
 
     updateProducts: async (name, description, quantity, value, ID) =>{
-        console.log(name, description, quantity, value, ID)
         const sql = "UPDATE products SET name = ?, description = ?, quantity = ?, value = ? WHERE id = ?;";
         const [rows] = await pool.execute(sql, [name, description, quantity, value, ID]);
         return rows;

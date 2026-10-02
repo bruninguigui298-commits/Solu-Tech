@@ -16,10 +16,11 @@ const serviceService = {
         return result;
     },
     updateService: async (service) => {
+        console.log('test: ', service.name, service.description, service.duration, service.value, service.id)
         const result = await serviceRepository.updateServices(
-            service.name, service.description, service.value, service.duration,
- service.id
+            service.name, service.description, service.duration, service.value, service.id
         );
+        console.log(result)
         return result;
     },
     deleteService: async (ID) => {

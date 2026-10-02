@@ -19,6 +19,7 @@ const productService = {
         const result = await productRepositorys.updateProducts(
             products.name, products.description, products.quantity, products.value, products.id
         );
+        return result;
     },
     updateID: async (product) => {
         const result = await productRepositorys.update(product);

@@ -49,7 +49,8 @@ const saleRepository = {
 
 
     create: async (sale) => {
-
+        console.log(sale.id_clients);
+        
         const conn = await pool.getConnection()
 
         try {
@@ -76,6 +77,40 @@ const saleRepository = {
                     sale.id_users
                 ]
             )
+
+            const idSale = rowsSale.insertId;
+
+            const sqlItens = `
+                INSERT INTO items
+                (
+                    quantity,
+                    value,
+                    id_sale,
+                    id_products,
+                    id_services
+                )
+                VALUES (?, ?, ?, ?, ?);
+            `
+            
+            sale.itens.forEach(async item => {
+                console.log(
+                    item.quantity,
+                        item.value,
+                        item.id_sales,
+                        item.id_products,
+                        item.id_services);
+                
+                const [rowsItens] = await conn.execute(
+                    sqlItens,
+                    [
+                        item.quantity,
+                        item.value,
+                        idSale,
+                        item.id_products,
+                        item.id_services
+                    ]
+                )
+            });
 
 
             await conn.commit()

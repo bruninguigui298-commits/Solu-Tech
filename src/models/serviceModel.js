@@ -5,7 +5,7 @@ class serviceModel {
     #value;
     #duration;
 
-    constructor(id, name, description, quantity, value, duration) {
+    constructor(id, name, description, value, duration) {
         this.#id = id;
         this.#name = name;
         this.#description = description;
