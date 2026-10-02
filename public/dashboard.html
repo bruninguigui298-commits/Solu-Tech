@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel | Solutech</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand">Solutech</div>
+    <nav>
+      <p class="grp">Clientes</p>
+      <button data-view="clients-list" class="active">Listar</button>
+      <button data-view="clients-new">Cadastrar</button>
+      <p class="grp">Produtos</p>
+      <button data-view="products-list">Listar</button>
+      <button data-view="products-new">Cadastrar</button>
+      <p class="grp">Vendas</p>
+      <button data-view="sales-list">Listar</button>
+      <button data-view="sales-new">Nova venda</button>
+    </nav>
+    <div class="user"><span id="userName"></span><button class="btn ghost" id="logout">Sair</button></div>
+  </aside>
+  <main>
+    <section id="view-clients-list" class="on">
+      <h2>Clientes</h2>
+      <div class="tbl" id="clientList"></div>
+    </section>
+
+    <section id="view-clients-new">
+      <h2>Cadastrar cliente</h2>
+      <form class="card" id="clientForm">
+        <div class="grid">
+          <div><label for="cName">Nome</label><input id="cName" maxlength="100" required></div>
+          <div><label for="cEmail">E-mail</label><input id="cEmail" type="email" maxlength="100" required></div>
+          <div><label for="cCpf">CPF</label><input id="cCpf" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" required></div>
+        </div>
+        <label>Telefone</label>
+        <div class="grid">
+          <div><label for="cDdd">DDD</label><input id="cDdd" maxlength="5" inputmode="numeric" required></div>
+          <div><label for="cPhone">Número</label><input id="cPhone" maxlength="15" inputmode="numeric" required></div>
+          <div><label for="cObs">Observação</label><input id="cObs" maxlength="255"></div>
+        </div>
+        <label>Endereço</label>
+        <div class="grid">
+          <div><label for="aStreet">Rua</label><input id="aStreet" maxlength="100" required></div>
+          <div><label for="aNumber">Número</label><input id="aNumber" maxlength="10" required></div>
+          <div><label for="aDistrict">Bairro</label><input id="aDistrict" maxlength="50" required></div>
+          <div><label for="aCity">Cidade</label><input id="aCity" maxlength="50" required></div>
+          <div><label for="aState">Estado</label><input id="aState" maxlength="50" required></div>
+          <div><label for="aCep">CEP</label><input id="aCep" maxlength="10" inputmode="numeric" required></div>
+        </div>
+        <button class="btn">Cadastrar cliente</button>
+      </form>
+    </section>
+
+    <section id="view-products-list">
+      <h2>Produtos</h2>
+      <div class="tbl" id="productList"></div>
+    </section>
+
+    <section id="view-products-new">
+      <h2>Cadastrar produto</h2>
+      <form class="card" id="productForm">
+        <div class="grid">
+          <div><label for="pName">Nome</label><input id="pName" maxlength="100" required></div>
+          <div><label for="pDesc">Descrição</label><input id="pDesc" maxlength="255"></div>
+          <div><label for="pQty">Quantidade em estoque</label><input id="pQty" type="number" min="0" step="1" required></div>
+          <div><label for="pValue">Valor (R$)</label><input id="pValue" type="number" min="0" step="0.01" required></div>
+        </div>
+        <button class="btn">Cadastrar produto</button>
+      </form>
+    </section>
+
+    <section id="view-sales-list">
+      <h2>Vendas</h2>
+      <div class="tbl" id="saleList"></div>
+    </section>
+
+    <section id="view-sales-new">
+      <h2>Nova venda</h2>
+      <form class="card" id="saleForm">
+        <div class="grid">
+          <div><label for="sClient">Cliente</label><select id="sClient" required></select></div>
+          <div><label for="sPay">Forma de pagamento</label>
+            <select id="sPay" required>
+              <option>PIX</option><option>CARTAO_CREDITO</option><option>CARTAO_DEBITO</option><option>DINHEIRO</option><option>BOLETO</option>
+            </select></div>
+        </div>
+        <label>Itens</label>
+        <div id="items"></div>
+        <button type="button" class="btn ghost" id="addItem">Adicionar item</button>
+        <div class="total"><div><span class="msg" id="saleMsg"></span><br>Total <strong id="total">R$ 0,00</strong></div><button class="btn">Registrar venda</button></div>
+      </form>
+    </section>
+  </main>
+</div>
+<div id="toast" role="status"></div>
+<script src="api.js"></script>
+<script src="dashboard.js"></script>
+</body>
+</html>
