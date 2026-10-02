@@ -1,4 +1,4 @@
-// Ajuste aqui a URL da sua API
+// Ajuste aqui a URL da sua API ("" = mesma origem)
 const API_URL = "";
 
 const session = {
@@ -14,7 +14,7 @@ async function api(path, method = "GET", body) {
   const res = await fetch(API_URL + path, { method, headers, body: body ? JSON.stringify(body) : undefined });
   let json = {};
   try { json = await res.json(); } catch {}
-  if (res.status === 401 && !path.includes("login")) { session.clear(); location.href = "login.html"; }
+  if (res.status === 401 && session.token) { session.clear(); location.href = "login.html"; }
   if (!res.ok || json.success === false) throw new Error(json.message || "Erro " + res.status);
   return json.data !== undefined ? json.data : json;
 }

@@ -4,12 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Painel | Solutech</title>
+<link rel="icon" href="logo-mark.png">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="app">
   <aside>
-    <div class="brand">Solutech</div>
+    <img class="logo" src="logo.png" alt="Solutech ERP">
     <nav>
       <p class="grp">Clientes</p>
       <button data-view="clients-list" class="active">Buscar</button>
@@ -26,6 +28,7 @@
   <main>
     <section id="view-clients-list" class="on">
       <h2>Clientes</h2>
+      <div class="bar"><input type="search" id="qClients" placeholder="Buscar por nome"></div>
       <div class="tbl" id="clientList"></div>
     </section>
 
@@ -58,6 +61,7 @@
 
     <section id="view-products-list">
       <h2>Produtos</h2>
+      <div class="bar"><input type="search" id="qProducts" placeholder="Buscar por nome"></div>
       <div class="tbl" id="productList"></div>
     </section>
 
@@ -76,6 +80,7 @@
 
     <section id="view-sales-list">
       <h2>Vendas</h2>
+      <div class="bar"><input type="search" id="qSales" placeholder="Buscar por nome do cliente ou vendedor"></div>
       <div class="tbl" id="saleList"></div>
     </section>
 
@@ -84,6 +89,7 @@
       <form class="card" id="saleForm">
         <div class="grid">
           <div><label for="sClient">Cliente</label><select id="sClient" required></select></div>
+          <div><label for="sUser">Vendedor</label><select id="sUser" required></select></div>
           <div><label for="sPay">Forma de pagamento</label>
             <select id="sPay" required>
               <option>PIX</option><option>CARTAO_CREDITO</option><option>CARTAO_DEBITO</option><option>DINHEIRO</option><option>BOLETO</option>
@@ -97,6 +103,8 @@
     </section>
   </main>
 </div>
+<dialog id="dlg"><form id="dlgForm"><h2 id="dlgTitle"></h2><div id="dlgFields"></div>
+  <div class="dlg-actions"><button type="button" class="btn ghost" id="dlgCancel">Cancelar</button><button class="btn">Salvar</button></div></form></dialog>
 <div id="toast" role="status"></div>
 <script src="api.js"></script>
 <script src="dashboard.js"></script>
