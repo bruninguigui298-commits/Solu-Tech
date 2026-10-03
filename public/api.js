@@ -15,6 +15,9 @@ async function api(path, method = "GET", body) {
   let json = {};
   try { json = await res.json(); } catch {}
   if (res.status === 401 && session.token) { session.clear(); location.href = "login.html"; }
-  if (!res.ok || json.success === false) throw new Error(json.message || "Erro " + res.status);
+  if (!res.ok || json.success === false) {
+  console.error(method, path, res.status, json);
+  throw new Error(json.message || "Erro " + res.status);
+}
   return json.data !== undefined ? json.data : json;
 }

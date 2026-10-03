@@ -13,19 +13,39 @@
   <aside>
     <img class="logo" src="logo.png" alt="Solutech ERP">
     <nav>
+      <p class="grp">Meu perfil</p>
+      <button data-view="profile-summary">Resumo</button>
       <p class="grp">Clientes</p>
-      <button data-view="clients-list" class="active">Buscar</button>
+      <button data-view="clients-list" class="active">Buscar clientes</button>
       <button data-view="clients-new">Cadastrar</button>
       <p class="grp">Produtos</p>
-      <button data-view="products-list">Buscar</button>
+      <button data-view="products-list">Buscar produtos</button>
       <button data-view="products-new">Cadastrar</button>
       <p class="grp">Vendas</p>
-      <button data-view="sales-list">Buscar</button>
+      <button data-view="sales-list">Buscar vendas</button>
       <button data-view="sales-new">Nova venda</button>
     </nav>
     <div class="user"><span id="userName"></span><button class="btn ghost" id="logout">Sair</button></div>
   </aside>
   <main>
+    <section id="view-profile-summary">
+      <h2>Meu perfil</h2>
+      <div class="pf" id="profileCard"></div>
+      <div class="kpis" id="kpis"></div>
+      <div class="tbl" id="byPay"></div>
+    </section>
+
+    <section id="view-profile-report">
+      <h2>Relatório de vendas</h2>
+      <div class="bar filters">
+        <div><label for="rFrom">De</label><input type="date" id="rFrom"></div>
+        <div><label for="rTo">Até</label><input type="date" id="rTo"></div>
+        <button type="button" class="btn ghost" id="rCsv">Exportar CSV</button>
+      </div>
+      <div class="kpis" id="rKpis"></div>
+      <div class="tbl" id="reportList"></div>
+    </section>
+
     <section id="view-clients-list" class="on">
       <h2>Clientes</h2>
       <div class="bar"><input type="search" id="qClients" placeholder="Buscar por nome"></div>
@@ -101,6 +121,22 @@
         <div class="total"><div><span class="msg" id="saleMsg"></span><br>Total <strong id="total">R$ 0,00</strong></div><button class="btn">Registrar venda</button></div>
       </form>
     </section>
+    <section id="view-sales-items">
+  <h2>Produtos vendidos</h2>
+  <div class="bar"><input type="search" id="qSold" placeholder="Buscar por produto, cliente ou vendedor"></div>
+  <div class="tbl" id="soldList"></div>
+</section>
+
+<section id="view-profile-items">
+  <h2>Meus produtos vendidos</h2>
+  <div class="bar filters">
+    <div><label for="iFrom">De</label><input type="date" id="iFrom"></div>
+    <div><label for="iTo">Até</label><input type="date" id="iTo"></div>
+    <div><label for="iQ">Produto</label><input type="search" id="iQ" placeholder="Buscar produto"></div>
+  </div>
+  <div class="kpis" id="iKpis"></div>
+  <div class="tbl" id="iList"></div>
+</section>
   </main>
 </div>
 <dialog id="dlg"><form id="dlgForm"><h2 id="dlgTitle"></h2><div id="dlgFields"></div>

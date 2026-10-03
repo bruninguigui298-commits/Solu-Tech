@@ -5,7 +5,7 @@ const money = v => Number(v || 0).toLocaleString("pt-BR", { style: "currency", c
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const toast = (msg, err) => {
   const t = $("#toast"); t.textContent = msg; t.className = "show" + (err ? " err" : "");
-  clearTimeout(toast.t); toast.t = setTimeout(() => t.className = "", 3500);
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.className = "", err ? 9000 : 3500);
 };
 const list = d => Array.isArray(d) ? d : (d && Object.values(d).find(Array.isArray)) || [];
 const safeList = p => api(p).then(list).catch(() => []);
@@ -21,7 +21,17 @@ const term = id => $(id).value.trim().toLowerCase();
 
 const db = { clients: [], products: [], sales: [], users: [] };
 const PAY = ["PIX", "CARTAO_CREDITO", "CARTAO_DEBITO", "DINHEIRO", "BOLETO"];
-const withMe = u => u.length || !session.user ? u : [session.user];
+// Identidade: junta a resposta do login com os dados do token (JWT) e a lista de usuários
+const jwt = () => { try { return JSON.parse(atob(session.token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))); } catch { return {}; } };
+const me = () => ({ ...jwt(), ...(session.user || {}) });
+const meId = () => {
+  const m = me(), id = m.id ?? m.userId ?? m.user_id ?? m.id_users ?? m.sub;
+  if (id != null) return id;
+  const u = db.users.find(x => (m.email && x.email === m.email) || (m.name && x.name === m.name));
+  return u ? u.id : null;
+};
+const myUser = () => db.users.find(u => u.id == meId()) || me();
+const withMe = u => u.length || meId() == null ? u : [{ ...me(), id: meId() }];
 const cname = id => (db.clients.find(c => c.id == id) || {}).name || "#" + id;
 const uname = id => { const u = db.users.find(u => u.id == id) || {}; return u.name || u.email || "#" + id; };
 
@@ -42,9 +52,11 @@ const VIEW = { clients: "clients-list", products: "products-list", sales: "sales
 const views = {
   "clients-list": loadClients, "clients-new": async () => {},
   "products-list": loadProducts, "products-new": async () => {},
-  "sales-list": loadSales, "sales-new": prepareSale
+  "sales-list": loadSales, "sales-new": prepareSale,
+  "profile-summary": loadProfile, "profile-report": loadReport,
+  "sales-items": loadSoldAll, "profile-items": loadSoldMine
 };
-$("#userName").textContent = (session.user && (session.user.name || session.user.email)) || "";
+$("#userName").textContent = me().name || me().email || "";
 $("#logout").onclick = () => { session.clear(); location.href = "login.html"; };
 document.querySelectorAll("nav button").forEach(b => b.onclick = () => show(b.dataset.view));
 function show(view) {
@@ -90,9 +102,35 @@ $("#dlgForm").addEventListener("submit", e => {
 
 // ---- clientes ----
 async function loadClients() { db.clients = list(await api("/clients")); renderClients(); }
+const one = v => Array.isArray(v) ? v[0] : v;
+const dash = v => v ? esc(v) : "-";
+
+function info(c) {
+  const p = one(c.phone ?? c.phones) || {}, a = one(c.addresses ?? c.address) || {};
+  return {
+    ddd: p.ddd ?? c.ddd, tel: p.number ?? c.phone_number, obs: p.observation ?? c.observation,
+    street: a.street ?? c.street, num: a.number ?? c.address_number, district: a.district ?? c.district,
+    city: a.city ?? c.city, state: a.state ?? c.state, cep: a.cep ?? c.cep
+  };
+}
+
 function renderClients() {
-  const s = term("#qClients");
-  table("#clientList", [["Nome", c => esc(c.name)], ["E-mail", c => esc(c.email)], ["CPF", c => esc(c.cpf)], acts("clients")], db.clients.filter(c => has(c.name, s)));
+  const s = term("#qClients"), el = $("#clientList");
+  const rows = db.clients.filter(c => has(c.name, s));
+  const f = (l, v) => `<div><dt>${l}</dt><dd>${v || "-"}</dd></div>`;
+  el.className = "cards";
+  el.innerHTML = rows.length ? rows.map(c => {
+    const i = info(c);
+    return `<article class="cc"><h3>${esc(c.name)}</h3><dl>
+      ${f("E-mail", esc(c.email))}
+      ${f("CPF", esc(c.cpf))}
+      ${f("Telefone", i.tel ? esc(`(${i.ddd || ""}) ${i.tel}`) : "")}
+      ${f("Observação", esc(i.obs))}
+      ${f("Endereço", i.street ? esc(`${i.street}, ${i.num || "s/n"} - ${i.district || ""}`) : "")}
+      ${f("Cidade/UF", i.city ? esc(`${i.city}/${i.state || ""}`) : "")}
+      ${f("CEP", esc(i.cep))}
+    </dl><div class="btns">${acts("clients")[1](c)}</div></article>`;
+  }).join("") : `<p class="empty">Nada encontrado.</p>`;
 }
 $("#cCpf").addEventListener("input", e => {
   const d = e.target.value.replace(/\D/g, "").slice(0, 11);
@@ -152,7 +190,7 @@ async function prepareSale() {
   db.clients = c; db.products = p; db.users = withMe(u);
   $("#sClient").innerHTML = `<option value="">Selecione</option>` + c.map(x => `<option value="${x.id}">${esc(x.name)}</option>`).join("");
   $("#sUser").innerHTML = `<option value="">Selecione</option>` + db.users.map(x => `<option value="${x.id}">${esc(x.name || x.email)}</option>`).join("");
-  if (session.user && session.user.id) $("#sUser").value = session.user.id;
+  if (meId() != null) $("#sUser").value = meId();
   if (!$("#items").children.length) addItem();
   else document.querySelectorAll("#items select").forEach(s => { const v = s.value; fillProducts(s); s.value = v; });
 }
@@ -200,6 +238,106 @@ $("#saleForm").addEventListener("submit", e => {
     $("#items").innerHTML = ""; e.target.reset(); toast("Venda registrada"); show("sales-list");
   });
 });
+
+// ---- meu perfil ----
+async function loadMine() {
+  const [s, c, u] = await Promise.all([api("/sales"), safeList("/clients"), safeList("/users")]);
+  db.clients = c; db.users = withMe(u); db.sales = list(s);
+  const mu = myUser();
+  $("#userName").textContent = mu.name || mu.email || "";
+  if (meId() == null) { toast("Não consegui identificar seu usuário. Mostrando todas as vendas.", true); return db.sales; }
+  return db.sales.filter(v => v.id_users == meId());
+}
+const kpis = (el, rows) => {
+  const vals = rows.map(v => Number(v.total || 0)), sum = vals.reduce((t, x) => t + x, 0);
+  $(el).innerHTML = [["Vendas", rows.length], ["Faturamento", money(sum)], ["Ticket médio", money(rows.length ? sum / rows.length : 0)], ["Maior venda", money(Math.max(0, ...vals))]]
+    .map(([l, v]) => `<div class="kpi"><span>${l}</span><strong>${v}</strong></div>`).join("");
+};
+
+async function loadProfile() {
+  const rows = await loadMine(), u = myUser(), by = {};
+  $("#profileCard").innerHTML = `<h3>${esc(u.name || u.email || "Vendedor")}</h3><p>${esc(u.email || "")}</p>`;
+  kpis("#kpis", rows);
+  rows.forEach(v => { const k = v.payment_method || "-"; by[k] = by[k] || { n: 0, sum: 0 }; by[k].n++; by[k].sum += Number(v.total || 0); });
+  table("#byPay", [["Pagamento", r => esc(r[0])], ["Vendas", r => r[1].n], ["Total", r => money(r[1].sum)]], Object.entries(by));
+}
+
+let mine = [];
+const inRange = (v, fi = "#rFrom", ti = "#rTo") => {
+  const f = $(fi).value, t = $(ti).value;
+  if (!v.date) return !f && !t;
+  const day = new Date(v.date).toLocaleDateString("sv-SE"); // AAAA-MM-DD no fuso local
+  return (!f || day >= f) && (!t || day <= t);
+};
+async function loadReport() { mine = await loadMine(); renderReport(); }
+function renderReport() {
+  const rows = mine.filter(v => inRange(v)).sort((a, b) => new Date(b.date) - new Date(a.date));
+  renderReport.rows = rows;
+  kpis("#rKpis", rows);
+  table("#reportList", [
+    ["Data", v => v.date ? new Date(v.date).toLocaleString("pt-BR") : "-"],
+    ["Cliente", v => esc(cname(v.id_clients))],
+    ["Pagamento", v => esc(v.payment_method)],
+    ["Total", v => money(v.total)]
+  ], rows);
+}
+["#rFrom", "#rTo"].forEach(id => $(id).addEventListener("input", renderReport));
+$("#rCsv").onclick = () => {
+  const rows = renderReport.rows || [];
+  if (!rows.length) return toast("Não há vendas no período", true);
+  const q = s => `"${String(s ?? "").replace(/"/g, '""')}"`;
+  const csv = [["Data", "Cliente", "Pagamento", "Total"], ...rows.map(v => [v.date ? new Date(v.date).toLocaleString("pt-BR") : "", cname(v.id_clients), v.payment_method, Number(v.total).toFixed(2).replace(".", ",")])]
+    .map(r => r.map(q).join(";")).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" }));
+  a.download = "relatorio-vendas.csv"; a.click(); URL.revokeObjectURL(a.href);
+};
+
+// ---- produtos vendidos ----
+// Junta os itens (GET /item, ou os itens aninhados em /sales) com vendas, produtos e serviços
+async function soldRows() {
+  const [s, it, pr, sv, c, u] = await Promise.all([api("/sales"), safeList("/item"), safeList("/product"), safeList("/service"), safeList("/clients"), safeList("/users")]);
+  db.clients = c; db.users = withMe(u); db.products = pr; db.sales = list(s);
+  const nested = db.sales.flatMap(v => list(v.items).map(i => ({ ...i, id_sales: i.id_sales ?? v.id })));
+  const sale = id => db.sales.find(v => v.id == id) || {};
+  const name = i => i.product_name || i.name
+    || (i.id_products != null ? (pr.find(p => p.id == i.id_products) || {}).name || "Produto #" + i.id_products
+    : i.id_services != null ? (sv.find(x => x.id == i.id_services) || {}).name || "Serviço #" + i.id_services : "-");
+  return (it.length ? it : nested)
+    .map(i => { const v = sale(i.id_sales); return { ...i, date: v.date, id_clients: v.id_clients, id_users: v.id_users, item: name(i) }; })
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+const soldTable = (el, rows) => table(el, [
+  ["Data", v => v.date ? new Date(v.date).toLocaleString("pt-BR") : "-"],
+  ["Cliente", v => esc(cname(v.id_clients))],
+  ["Vendedor", v => esc(uname(v.id_users))],
+  ["Produto", v => esc(v.item)],
+  ["Qtd", v => v.quantity],
+  ["Valor", v => money(v.value)],
+  ["Subtotal", v => money(v.subtotal)]
+], rows);
+
+let sold = [], soldMine = [];
+async function loadSoldAll() { sold = await soldRows(); renderSoldAll(); }
+function renderSoldAll() {
+  const s = term("#qSold");
+  soldTable("#soldList", sold.filter(v => has(v.item, s) || has(cname(v.id_clients), s) || has(uname(v.id_users), s)));
+}
+async function loadSoldMine() {
+  const rows = await soldRows();
+  if (meId() == null) toast("Não consegui identificar seu usuário. Mostrando todos os itens.", true);
+  soldMine = meId() == null ? rows : rows.filter(v => v.id_users == meId());
+  renderSoldMine();
+}
+function renderSoldMine() {
+  const s = term("#iQ"), rows = soldMine.filter(v => inRange(v, "#iFrom", "#iTo") && has(v.item, s));
+  const qty = rows.reduce((t, v) => t + Number(v.quantity || 0), 0), sum = rows.reduce((t, v) => t + Number(v.subtotal || 0), 0);
+  $("#iKpis").innerHTML = [["Itens vendidos", qty], ["Produtos diferentes", new Set(rows.map(v => v.item)).size], ["Faturamento", money(sum)]]
+    .map(([l, v]) => `<div class="kpi"><span>${l}</span><strong>${v}</strong></div>`).join("");
+  soldTable("#iList", rows);
+}
+$("#qSold").addEventListener("input", renderSoldAll);
+["#iFrom", "#iTo", "#iQ"].forEach(id => $(id).addEventListener("input", renderSoldMine));
 
 [["#qClients", renderClients], ["#qProducts", renderProducts], ["#qSales", renderSales]].forEach(([id, fn]) => $(id).addEventListener("input", fn));
 show("clients-list");
