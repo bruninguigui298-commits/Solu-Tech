@@ -70,7 +70,8 @@ const saleController = {
                 total,
                 payment_method,
                 id_clients,
-                id_users
+                id_users,
+                items
             } = req.body
 
 
@@ -83,7 +84,7 @@ const saleController = {
 
 
             const result =
-                await saleService.create(sale)
+                await saleService.create(sale, items)
 
 
             return res.status(201).json({

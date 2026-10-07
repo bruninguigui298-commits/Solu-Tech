@@ -18,14 +18,14 @@ document.querySelectorAll(".pw button").forEach(b => b.onclick = () => {
 $("#form").addEventListener("submit", async e => {
   e.preventDefault();
   const msg = $("#msg"), btn = $("#btn");
-  msg.style.color = ""; msg.textContent = ""; btn.disabled = true;
+  msg.classList.remove("ok"); msg.textContent = ""; btn.disabled = true; btn.classList.add("loading");
   try {
     const data = await api("/auth/login", "POST", { email: $("#email").value.trim(), password: $("#password").value });
     session.save(data.token, data.user || data);
     location.href = "dashboard.html";
   } catch (err) {
     msg.textContent = err.message;
-    btn.disabled = false;
+    btn.disabled = false; btn.classList.remove("loading");
   }
 });
 
@@ -33,15 +33,15 @@ $("#form").addEventListener("submit", async e => {
 $("#regForm").addEventListener("submit", async e => {
   e.preventDefault();
   const msg = $("#regMsg"), btn = $("#regBtn");
-  msg.textContent = ""; btn.disabled = true;
+  msg.textContent = ""; btn.disabled = true; btn.classList.add("loading");
   try {
     const email = $("#rEmail").value.trim();
     await api("/users", "POST", { name: $("#rName").value.trim(), email, password: $("#rPass").value });
     e.target.reset(); tab("login");
     $("#email").value = email;
-    $("#msg").style.color = "var(--ok)"; $("#msg").textContent = "Conta criada. Entre para continuar.";
+    $("#msg").classList.add("ok"); $("#msg").textContent = "Conta criada. Entre para continuar.";
   } catch (err) {
     msg.textContent = err.message;
   }
-  btn.disabled = false;
+  btn.disabled = false; btn.classList.remove("loading");
 });

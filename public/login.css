@@ -1,0 +1,92 @@
+/* Login moderno — carregado só em login.html, depois de style.css */
+.auth{position:relative;overflow:hidden;isolation:isolate}
+.auth::before,.auth::after{display:none}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);opacity:.55;z-index:-1;pointer-events:none;animation:float 14s ease-in-out infinite}
+.orb.a{width:460px;height:460px;background:#2f6bff;left:-140px;top:-120px}
+.orb.b{width:380px;height:380px;background:#3cc8f0;right:-120px;bottom:-100px;opacity:.35;animation-delay:-6s}
+.grid-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:44px 44px;-webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%);mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%)}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,30px)}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+.hero{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+.hero h1{background:linear-gradient(180deg,#fff,#a9b8e0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.os{background:rgba(255,255,255,.04);backdrop-filter:blur(10px);border-color:rgba(255,255,255,.08)}
+.feat i{background:rgba(47,107,255,.14);border-color:rgba(47,107,255,.3)}
+
+.authcard{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));backdrop-filter:blur(22px) saturate(140%);-webkit-backdrop-filter:blur(22px) saturate(140%);
+  border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:8px;
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.8),0 0 0 1px rgba(47,107,255,.08),inset 0 1px 0 rgba(255,255,255,.08);
+  animation:rise .7s .1s cubic-bezier(.2,.7,.2,1) both}
+.tabs{position:relative;margin:8px 8px 0;padding:4px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.06);border-radius:14px;gap:4px}
+.tabs button{border:0;border-radius:10px;padding:10px;font-size:14px;transition:color .2s,background .2s}
+.tabs button.on{background:linear-gradient(180deg,#3b78ff,#2557e0);color:#fff;box-shadow:0 6px 16px rgba(47,107,255,.4)}
+.authcard form{padding:26px 22px 20px;gap:18px}
+.authcard form.on{animation:rise .35s ease both}
+.authcard h2{font-size:26px;letter-spacing:-.02em;margin-bottom:-8px}
+.lead{font-size:14px}
+
+.field{position:relative}
+.field>svg{position:absolute;left:14px;top:50%;width:18px;height:18px;transform:translateY(-50%);fill:none;stroke:var(--muted);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;transition:stroke .2s}
+.field:focus-within>svg{stroke:var(--blue)}
+.field input{padding:14px 14px 14px 44px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.09);border-radius:12px;transition:border-color .2s,box-shadow .2s,background .2s}
+.field input::placeholder{color:#4d5878}
+.field input:hover{border-color:rgba(255,255,255,.18)}
+.field input:focus{border-color:var(--blue);background:rgba(0,0,0,.6);box-shadow:0 0 0 4px rgba(47,107,255,.18)}
+.field.pw input{padding-right:84px}
+.pw button{right:8px;padding:6px 10px;border-radius:8px;transition:background .2s,color .2s}
+.pw button:hover{background:rgba(255,255,255,.07);color:var(--text)}
+label{font-weight:500;color:#aab4d0}
+
+.btn{position:relative;padding:14px 18px;border-radius:12px;font-size:15px;background:linear-gradient(180deg,#3b78ff,#2557e0);
+  box-shadow:0 10px 24px -6px rgba(47,107,255,.6),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .15s,box-shadow .2s,filter .2s}
+.btn:hover{background:linear-gradient(180deg,#4a83ff,#2b61ee);transform:translateY(-1px);box-shadow:0 14px 28px -6px rgba(47,107,255,.7),inset 0 1px 0 rgba(255,255,255,.3)}
+.btn:active{transform:translateY(0)}
+.btn:disabled{cursor:wait;filter:saturate(.7) brightness(.9);transform:none}
+.btn.loading{color:transparent}
+.btn.loading::after{content:"";position:absolute;inset:0;margin:auto;width:20px;height:20px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.msg{min-height:20px;font-size:13px}
+.msg:not(:empty){padding:9px 12px;border-radius:10px;background:rgba(255,90,106,.1);border:1px solid rgba(255,90,106,.25)}
+.msg.ok:not(:empty){background:rgba(61,220,151,.1);border-color:rgba(61,220,151,.28)}
+.foot{font-size:13px}
+.copy{margin-top:18px}
+@media(max-width:860px){.authcard{border-radius:20px}.orb{opacity:.4}}
+@media(prefers-reduced-motion:reduce){.orb,.hero,.authcard,.authcard form.on{animation:none!important}}
+
+/* referência visual: setup gamer (headset + PC, recortado da arte da marca) */
+.auth{background:#03050b}
+.auth::before{display:block;content:"";position:fixed;inset:0;z-index:-1;width:auto;height:auto;clip-path:none;
+  background:linear-gradient(90deg,#03050b 0%,#03050b 52%,rgba(3,5,11,.35) 72%,rgba(3,5,11,.55) 100%),url("login-bg.jpg") right center/auto 100% no-repeat}
+.orb{opacity:.3}.grid-bg{opacity:.5}
+.eyebrow{display:block;margin-top:28px;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan)}
+.eyebrow+h1{margin-top:12px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,#3b78ff,#3cc8f0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.feat{grid-template-columns:1fr 1fr;gap:16px 22px;max-width:480px;padding-top:22px;border-top:1px solid rgba(255,255,255,.1)}
+.feat b{font-size:13.5px}
+@media(max-width:860px){.hero>:not(.logo){display:none}.auth::before{background:linear-gradient(rgba(3,5,11,.7),rgba(3,5,11,.9)),url("login-bg.jpg") center/cover no-repeat}}
+
+/* palco 3D */
+.wrap{grid-template-columns:1.2fr 400px;max-width:1140px;gap:clamp(24px,5vw,72px)}
+.hero{display:flex;flex-direction:column;min-width:0}
+.hero h1{font-size:clamp(28px,3.4vw,40px);margin:10px 0 0}
+.hero .logo{width:170px}
+.eyebrow{margin-top:20px}
+.stage{position:relative;height:clamp(300px,52vh,470px);margin:4px -16px 0}
+.stage::before{content:"";position:absolute;inset:6% 4% 4%;background:radial-gradient(closest-side,rgba(47,107,255,.34),rgba(47,107,255,.10) 55%,transparent 75%);filter:blur(8px);pointer-events:none}
+.stage canvas{position:relative;display:block;width:100%;height:100%;cursor:grab;touch-action:none;outline:0;border-radius:20px}
+.stage canvas.grab{cursor:grabbing}
+.stage canvas:focus-visible{box-shadow:0 0 0 2px var(--blue)}
+.hint{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;white-space:nowrap;font-size:12px;color:var(--muted);
+  padding:7px 14px;border-radius:99px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);backdrop-filter:blur(8px);pointer-events:none;transition:opacity .5s,transform .5s}
+.hint svg{width:14px;height:14px;fill:none;stroke:var(--cyan);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hint.hide{opacity:0;transform:translate(-50%,6px)}
+.stage.no3d{display:none}
+.chips{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chips li{font-size:12px;color:#aab4d0;padding:6px 12px;border-radius:99px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04)}
+@media(max-width:860px){
+  .hero>:not(.logo):not(.stage){display:none}
+  .stage{height:240px;margin:0 -8px}
+}
+@media(max-height:700px){.stage{height:clamp(240px,44vh,380px)}.eyebrow{margin-top:12px}}

@@ -26,7 +26,32 @@ const saleService = {
     },
 
 
-    create: async (sale) => {
+    create: async (sale, items = []) => {
+
+        if (!Array.isArray(items)) {
+            throw new Error('Os itens da venda devem ser uma lista')
+        }
+
+        for (const item of items) {
+
+            if (!item.id_products && !item.id_services) {
+                throw new Error(
+                    'Cada item precisa de um produto ou serviço'
+                )
+            }
+
+            if (!Number.isInteger(Number(item.quantity)) ||
+                Number(item.quantity) <= 0) {
+                throw new Error(
+                    'A quantidade de cada item deve ser um inteiro maior que zero'
+                )
+            }
+        }
+
+        // com itens, o total é recalculado no repository
+        if (items.length > 0) {
+            sale.total = sale.total > 0 ? sale.total : 1
+        }
 
         if (!sale.total) {
             throw new Error(
@@ -58,7 +83,7 @@ const saleService = {
             )
         }
 
-        return await saleRepository.create(sale)
+        return await saleRepository.create(sale, items)
     },
 
 
