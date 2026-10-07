@@ -6,7 +6,7 @@
 <title>Painel | Solutech</title>
 <link rel="icon" href="logo-mark.png">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 <div class="app">
@@ -48,7 +48,7 @@
 
     <section id="view-clients-list" class="on">
       <h2>Clientes</h2>
-      <div class="bar"><input type="search" id="qClients" placeholder="Buscar por nome"></div>
+      <div class="bar barflex"><input type="search" id="qClients" placeholder="Buscar por nome"><button type="button" class="btn ghost" id="resetClientOrder" title="Voltar à ordem original">Restaurar ordem</button></div><p class="hint-drag">Arraste pelo ícone <b>⠿</b> ou use <b>‹ ›</b> para escolher a ordem dos cards.</p>
       <div class="tbl" id="clientList"></div>
     </section>
 
@@ -81,7 +81,7 @@
 
     <section id="view-products-list">
       <h2>Produtos</h2>
-      <div class="bar"><input type="search" id="qProducts" placeholder="Buscar por nome"></div>
+      <div class="bar"><input type="search" id="qProducts" placeholder="Buscar por nome ou marca"></div>
       <div class="tbl" id="productList"></div>
     </section>
 
@@ -90,10 +90,17 @@
       <form class="card" id="productForm">
         <div class="grid">
           <div><label for="pName">Nome</label><input id="pName" maxlength="100" required></div>
+          <div><label for="pBrand">Fornecedor (marca)</label><input id="pBrand" maxlength="100" placeholder="Ex.: Logitech"></div>
           <div><label for="pDesc">Descrição</label><input id="pDesc" maxlength="255"></div>
           <div><label for="pQty">Quantidade em estoque</label><input id="pQty" type="number" min="0" step="1" required></div>
           <div><label for="pValue">Valor (R$)</label><input id="pValue" type="number" min="0" step="0.01" required></div>
         </div>
+        <div class="fld">
+          <label for="pModel">Imagem 3D do produto</label>
+          <input id="pModel" type="file" accept=".glb,model/gltf-binary">
+          <p class="help">Aceita apenas modelo 3D no formato <b>.glb</b> (até 25 MB). Ele aparece em Buscar produtos e abre animado ao clicar na imagem.</p>
+        </div>
+        <p class="msg" id="pMsg"></p>
         <button class="btn">Cadastrar produto</button>
       </form>
     </section>
@@ -141,8 +148,15 @@
 </div>
 <dialog id="dlg"><form id="dlgForm"><h2 id="dlgTitle"></h2><div id="dlgFields"></div>
   <div class="dlg-actions"><button type="button" class="btn ghost" id="dlgCancel">Cancelar</button><button class="btn">Salvar</button></div></form></dialog>
+<dialog id="v3d" class="v3d" aria-label="Visualizador 3D do produto">
+  <div class="v3d-head"><div><strong id="v3dTitle"></strong><small id="v3dSub"></small></div><button type="button" class="act" id="v3dClose" aria-label="Fechar">&times;</button></div>
+  <div class="v3d-stage" id="v3dStage"><div class="v3d-load" id="v3dLoad"></div></div>
+  <div class="v3d-hint">Arraste para a esquerda ou direita para girar &middot; role para zoom &middot; duplo clique para resetar</div>
+</dialog>
 <div id="toast" role="status"></div>
 <script src="api.js"></script>
-<script src="dashboard.js"></script>
+<script src="viewer3d.js?v=3"></script>
+<script src="cyberbg.js"></script>
+<script src="dashboard.js?v=6"></script>
 </body>
 </html>

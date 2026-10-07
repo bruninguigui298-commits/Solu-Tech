@@ -9,6 +9,7 @@ import authRoutes from './routes/authRoutes.js';
 import itemRoutes from './routes/itemRoutes.js'
 import productRoutes from "./routes/productRouter.js";
 import serviceRouter from "./routes/serviceRouter.js";
+import { migrate } from "./configs/migrate.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = express();
@@ -26,6 +27,8 @@ app.use("/auth", authRoutes)
 app.use("/item", itemRoutes);
 app.use("/product", productRoutes);
 app.use("/service", serviceRouter);
+
+await migrate()
 
 app.listen(port, () => {
     console.log(`SERVIDOR RODANDO NA PORTA ${port}`)

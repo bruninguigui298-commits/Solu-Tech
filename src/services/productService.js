@@ -1,4 +1,5 @@
 import productRepositorys from "../repositories/productRepository.js";
+import { removeModelFiles } from "../configs/models.js";
 
 const productService = {
     recoverproducts: async () => {
@@ -11,13 +12,13 @@ const productService = {
     },
     createProduct: async (products) => {
         const result = await productRepositorys.createProducts(
-            products.name, products.description, products.quantity, products.value
+            products.name, products.description, products.quantity, products.value, products.brand
         );
         return result;
     },
     updateProduct: async (products) => {
         const result = await productRepositorys.updateProducts(
-            products.name, products.description, products.quantity, products.value, products.id
+            products.name, products.description, products.quantity, products.value, products.id, products.brand
         );
     },
     updateID: async (product) => {
@@ -25,7 +26,9 @@ const productService = {
         return result;
     },
     deleteProducts: async (ID) => {
+        const model = await productRepositorys.getModel(ID);
         const result = await productRepositorys.delete(ID);
+        await removeModelFiles(model);
         return result
     }
 }

@@ -14,16 +14,18 @@ const productRepository = {
         return rows;
     },
 
-    createProducts: async (name, description, quantity, value) =>{
-        const sql = "INSERT INTO products (name, description, quantity, value) VALUES (?, ?, ?, ?);";
-        const [rows] = await pool.execute(sql, [name, description, quantity, value]);
+    createProducts: async (name, description, quantity, value, brand) =>{
+        const sql = "INSERT INTO products (name, description, brand, quantity, value) VALUES (?, ?, ?, ?, ?);";
+        const [rows] = await pool.execute(sql, [name, description, brand || null, quantity, value]);
         return rows;
     },
 
-    updateProducts: async (name, description, quantity, value, ID) =>{
-        console.log(name, description, quantity, value, ID)
-        const sql = "UPDATE products SET name = ?, description = ?, quantity = ?, value = ? WHERE id = ?;";
-        const [rows] = await pool.execute(sql, [name, description, quantity, value, ID]);
+    updateProducts: async (name, description, quantity, value, ID, brand) =>{
+        const sets = ["name = ?", "description = ?", "quantity = ?", "value = ?"];
+        const vals = [name, description, quantity, value];
+        if (brand !== undefined) { sets.push("brand = ?"); vals.push(brand || null); }
+        vals.push(ID);
+        const [rows] = await pool.execute(`UPDATE products SET ${sets.join(", ")} WHERE id = ?;`, vals);
         return rows;
     },
 
@@ -47,11 +49,26 @@ const productRepository = {
             campo.push("value = ?");
             valores.push(dados.value);
         }
+        if(dados.brand !== undefined){
+            campo.push("brand = ?");
+            valores.push(dados.brand || null);
+        }
 
         valores.push(dados.id)
 
         const sql = `UPDATE products SET ${campo.join(",")} WHERE id = ?; `;
         const [rows] = await pool.execute(sql, valores);
+        return rows;
+    },
+
+    // nome do arquivo 3D do produto: undefined = produto não existe, null = sem modelo
+    getModel: async(ID) =>{
+        const [rows] = await pool.execute("SELECT model_3d FROM products WHERE id = ?;", [ID]);
+        return rows.length ? rows[0].model_3d : undefined;
+    },
+
+    setModel: async(ID, file) =>{
+        const [rows] = await pool.execute("UPDATE products SET model_3d = ? WHERE id = ?;", [file, ID]);
         return rows;
     },
 

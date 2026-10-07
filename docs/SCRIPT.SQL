@@ -55,6 +55,8 @@ CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description VARCHAR(255),
+    brand VARCHAR(100) NULL,
+    model_3d VARCHAR(255) NULL,
     quantity INT NOT NULL,
     value DECIMAL(10, 2) NOT NULL
 );

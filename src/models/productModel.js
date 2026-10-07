@@ -4,13 +4,15 @@ class Product{
     #description;
     #quantity;
     #value;
+    #brand;
 
-    constructor(id, name, description, quantity, value){
+    constructor(id, name, description, quantity, value, brand){
         this.#id = id;
         this.#name = name;
         this.#description = description;
         this.#quantity = quantity;
         this.#value = value
+        this.#brand = brand
     }
 
     get id(){
@@ -39,6 +41,14 @@ class Product{
 
     set quantity(value){
         return this.#quantity = value;
+    }
+
+    get brand(){
+        return this.#brand;
+    }
+
+    set brand(value){
+        return this.#brand = value;
     }
 
     get value(){
