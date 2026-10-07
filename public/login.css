@@ -93,5 +93,12 @@ label{font-weight:500;color:#aab4d0}
 
 /* imagem de fundo bem suave atrás do fone */
 .stage{isolation:isolate}
-.stage::after{content:"";position:absolute;inset:-4% -6%;z-index:-1;pointer-events:none;background:url("bg-banner.jpg") center/cover no-repeat;opacity:.22;border-radius:24px;
+.stage::after{content:"";position:absolute;inset:-4% -6%;z-index:-1;pointer-events:none;background:url("bg-banner.jpg") center/cover no-repeat;opacity:.15;border-radius:24px;
   -webkit-mask-image:radial-gradient(ellipse at center,#000 35%,transparent 78%);mask-image:radial-gradient(ellipse at center,#000 35%,transparent 78%)}
+
+/* ===== logo em destaque ===== */
+.hero .logo{width:min(320px,70vw);filter:drop-shadow(0 0 16px rgba(47,139,255,.7)) drop-shadow(0 0 44px rgba(47,139,255,.35));animation:logoglow 4s ease-in-out infinite alternate}
+@keyframes logoglow{to{filter:drop-shadow(0 0 22px rgba(60,200,240,.8)) drop-shadow(0 0 56px rgba(47,139,255,.5))}}
+.hero .logo+*{margin-top:14px}
+@media(max-width:860px){.hero .logo{width:min(240px,64vw);margin:0 auto}}
+@media(prefers-reduced-motion:reduce){.hero .logo{animation:none}}
