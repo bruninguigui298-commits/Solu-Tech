@@ -152,17 +152,8 @@ dialog.v3d{width:min(900px,94vw);padding:0;overflow:hidden;border-radius:18px}
 /* ===== tema cyber (azul e preto) ===== */
 :root{--neon:#2f8bff;--neon2:#3cc8f0;--glass:rgba(8,12,24,.62)}
 body{background:radial-gradient(900px 520px at 8% 105%,rgba(47,107,255,.28),transparent 65%),radial-gradient(800px 480px at 100% -5%,rgba(60,200,240,.16),transparent 65%),linear-gradient(180deg,#02040a,#03060e 60%,#02030a);background-attachment:fixed}
-body::before,body::after{display:none}
-#cyber{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
-#cyber .grid{position:absolute;left:-50%;right:-50%;bottom:-8%;height:78%;transform:perspective(520px) rotateX(62deg);transform-origin:50% 100%;
-  background-image:linear-gradient(rgba(47,139,255,.62) 1px,transparent 1px),linear-gradient(90deg,rgba(47,139,255,.62) 1px,transparent 1px);background-size:64px 64px;
-  -webkit-mask-image:linear-gradient(to top,#000 8%,rgba(0,0,0,.35) 50%,transparent 92%);mask-image:linear-gradient(to top,#000 8%,rgba(0,0,0,.35) 50%,transparent 92%);animation:gridmove 5s linear infinite}
-@keyframes gridmove{to{background-position:0 64px}}
-#cyber .scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(120,170,255,.035) 0 1px,transparent 1px 3px)}
-#cyber .beam{position:absolute;left:0;right:0;height:140px;top:-140px;background:linear-gradient(180deg,transparent,rgba(47,139,255,.10),transparent);animation:beam 9s linear infinite}
-@keyframes beam{to{transform:translateY(calc(100vh + 280px))}}
-#cyber canvas{position:absolute;inset:0;width:100%;height:100%}
-#cyber .vig{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.65))}
+body::after{display:none}
+body:has(>.app)::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;width:auto;height:auto;clip-path:none;background:linear-gradient(180deg,rgba(2,4,10,.55),rgba(2,4,10,.78)),url("bg-banner.jpg") center/cover no-repeat;opacity:.5}
 aside{background:linear-gradient(180deg,rgba(6,10,22,.82),rgba(3,5,12,.72));backdrop-filter:blur(10px);border-right:1px solid rgba(47,139,255,.28);box-shadow:1px 0 24px rgba(47,139,255,.12)}
 .grp{text-shadow:0 0 14px rgba(47,139,255,.45)}
 nav button{transition:.18s}
@@ -184,8 +175,6 @@ h1,h2{text-shadow:0 0 18px rgba(47,139,255,.5)}
 #toast{background:rgba(6,10,22,.92);box-shadow:0 0 22px rgba(47,139,255,.4)}
 dialog::backdrop{background:rgba(0,3,10,.78);backdrop-filter:blur(3px)}
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:rgba(47,139,255,.35);border-radius:6px}::-webkit-scrollbar-track{background:transparent}
-@media (prefers-reduced-motion:reduce){#cyber .grid,#cyber .beam{animation:none}}
-
 /* ===== cards detalhados ===== */
 .ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .cc,.kpi,.pf{position:relative;overflow:hidden;background:linear-gradient(160deg,rgba(14,22,44,.78),rgba(5,8,18,.82) 60%);backdrop-filter:blur(8px);border:1px solid rgba(47,139,255,.28);

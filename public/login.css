@@ -90,3 +90,8 @@ label{font-weight:500;color:#aab4d0}
   .stage{height:240px;margin:0 -8px}
 }
 @media(max-height:700px){.stage{height:clamp(240px,44vh,380px)}.eyebrow{margin-top:12px}}
+
+/* imagem de fundo bem suave atrás do fone */
+.stage{isolation:isolate}
+.stage::after{content:"";position:absolute;inset:-4% -6%;z-index:-1;pointer-events:none;background:url("bg-banner.jpg") center/cover no-repeat;opacity:.22;border-radius:24px;
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 35%,transparent 78%);mask-image:radial-gradient(ellipse at center,#000 35%,transparent 78%)}
